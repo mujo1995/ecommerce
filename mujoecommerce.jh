@@ -1,0 +1,127 @@
+entity Customer {
+	CustomerName String,
+    CustomerUsername String,
+    CustomerAddress String,
+    CustomerEmail String,
+    CustomerCounrty String,
+    CustomerPswrd String,
+    CustomerCellnumbr Long,
+    CustomerID Long
+}
+
+entity Category {
+	CatName String,
+    CatCode Long,
+    CatDescriotion String
+}
+entity SubCategory{
+    SubCatName String,
+    SubCatDescription String,
+    SubCatCode Long
+}
+
+// an ignored comment
+/** not an ignored comment */
+entity Payment {
+	PaymentDate Long,
+	Amount Long,
+	PaymentID Long
+}
+
+entity Order {
+    Status String,
+    OrderID Long,
+    OrderDetail String,
+    ProductID String,
+    CatID Long,
+    OrderDate Instant
+}
+
+/**
+ * Task entity.
+ * @author The JHipster team.
+ */
+entity Cart {
+	CartID Long,
+	CartTotal Long
+}
+
+
+
+entity Product {
+	/**
+	* The productname attribute.
+	*/
+	ProductName String,
+	ProductStatus String,
+	ProductCode Long,
+	ProductDescr String,
+	ProductImage Instant,
+	ProductQnty Long
+}
+
+entity Admin {
+	Username String,
+	Password String
+	
+}
+entity Supplier{
+       SupplierName String,
+       SuppLocation String
+}
+
+
+
+relationship OneToOne {
+	Customer{payment} to Payment
+}
+
+relationship OneToOne {
+	Order {product} to Product
+}
+
+relationship OneToOne {
+	Category{subcategory} to SubCategory
+}
+
+relationship ManyToMany {
+	Product{Cart(cart)} to Cart{categoryID}
+}
+
+// defining multiple OneToMany relationships with comments
+relationship OneToMany {
+	Customer{supplier} to Supplier,
+	/**
+	* A relationship
+	*/
+	Payment {cart} to
+	/**
+	* Another side of the same relationship
+	*/
+	Cart
+}
+
+relationship OneToOne {
+	Product {category} to Category,
+    Product{subcategory} SubCategory
+}
+
+// defining multiple oneToOne relationships
+relationship OneToOne {
+	Admin{customer} to Customer,
+	Admin{supplier} to Supplier,
+	Admin{product} to Product
+}
+
+// Set pagination options
+paginate Category, Product with infinite-scroll
+paginate Supplier with pagination
+
+// Use Data Transfert Objects (DTO)
+// dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl except Admin
+
+// Set an angular suffix
+// angularSuffix * with mySuffix
